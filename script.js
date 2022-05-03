@@ -8,11 +8,21 @@ Parse.initialize(
 const inputItem = document.getElementById("item");
 const inputQty = document.getElementById("quantity");
 
+let itemList = [];
+
 const pushItems = async () => {
     const ShoplistItem = new Parse.Object("ShoplistItem");
 
     let item = inputItem.value;
     let quantity = parseInt(inputQty.value);
+
+    for (let i = 0; i < itemList.length; i++) {
+        if (item === itemList[i].item) {
+            ShoplistItem.set("objectId", itemList[i].id);
+            quantity += itemList[i].quantity;
+            break;
+        }
+    }
 
     ShoplistItem.set("item", item);
     ShoplistItem.set("quantity", quantity);
@@ -20,7 +30,7 @@ const pushItems = async () => {
     try {
         let result = await ShoplistItem.save()
         console.log("Novo objeto criado na classe \'ShoplistItem\' de ID: " + result.id);
-    } catch(error) {
+    } catch (error) {
         console.error("Falha em criar novo objeto. Erro de código: " + error);
     }
 
@@ -29,8 +39,6 @@ const pushItems = async () => {
 
     pullItems();
 };
-
-let itemList = [];
 
 const pullItems = async () => {
     const ShoplistItem = Parse.Object.extend("ShoplistItem");
@@ -41,10 +49,12 @@ const pullItems = async () => {
         itemList = [];
 
         for (const object of results) {
+            const id = object.id;
             const item = object.get("item");
             const quantity = object.get("quantity");
 
-            itemList.push({item, quantity});
+            itemList.push({id, item, quantity});
+            console.log(`ID: ${id}, Item: ${item}, Quantidade: ${quantity}`);
         }
 
         showItems();
@@ -55,7 +65,7 @@ const pullItems = async () => {
 
 const shoppingList = document.getElementById("list");
 
-function showItems() {
+function showItems () {
     shoppingList.innerHTML = "";
 
     for (let i = 0; i < itemList.length; i++) {
