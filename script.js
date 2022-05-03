@@ -7,10 +7,12 @@ Parse.initialize(
 
 const inputItem = document.getElementById("item");
 const inputQty = document.getElementById("quantity");
+const btPush = document.getElementById("push");
 
 let itemList = [];
 
 const pushItems = async () => {
+    btPush.disabled;
     const ShoplistItem = new Parse.Object("ShoplistItem");
 
     let item = inputItem.value;
@@ -18,9 +20,14 @@ const pushItems = async () => {
 
     for (let i = 0; i < itemList.length; i++) {
         if (item === itemList[i].item) {
-            ShoplistItem.set("objectId", itemList[i].id);
-            quantity += itemList[i].quantity;
-            break;
+            let response = await confirmAdd();
+            if (response) {
+                ShoplistItem.set("objectId", itemList[i].id);
+                quantity += itemList[i].quantity;
+                break;
+            } else {
+                return;
+            }
         }
     }
 
@@ -28,7 +35,7 @@ const pushItems = async () => {
     ShoplistItem.set("quantity", quantity);
 
     try {
-        let result = await ShoplistItem.save()
+        let result = await ShoplistItem.save();
         console.log("Novo objeto criado na classe \'ShoplistItem\' de ID: " + result.id);
     } catch (error) {
         console.error("Falha em criar novo objeto. Erro de código: " + error);
@@ -37,8 +44,41 @@ const pushItems = async () => {
     inputItem.value = "";
     inputQty.value = "";
 
+    btPush.disabled = false;
+
     pullItems();
 };
+
+const card = document.querySelector(".card-background")
+
+function confirmAdd () {
+    card.style.display = "block";
+
+    const btNo = document.getElementById("cardNo");
+    const btYes = document.getElementById("cardYes");
+
+    let response = null;
+
+    btNo.onclick = () => {
+        response = yesOrNo(btNo);
+        card.style.display = "none";
+    }
+
+    btYes.onclick = () => {
+        response = yesOrNo(btYes);
+        card.style.display = "none";
+    }
+
+    return response;
+}
+
+function yesOrNo (button) {
+    if (button.value == "yes") {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 const pullItems = async () => {
     const ShoplistItem = Parse.Object.extend("ShoplistItem");
@@ -78,8 +118,6 @@ function showItems () {
         shoppingList.appendChild(li);
     }
 }
-
-const btPush = document.getElementById("push");
 
 pullItems();
 btPush.onclick = pushItems;
