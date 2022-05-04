@@ -20,10 +20,41 @@ const pushItems = async () => {
 
     for (let i = 0; i < itemList.length; i++) {
         if (item === itemList[i].item) {
-            let response = await confirmAdd();
-            if (response) {
+            /* let response = await new Promise (
+                function (resolve, reject) {
+                    card.style.display = "block";
+
+                    const btNo = document.getElementById("cardNo");
+                    const btYes = document.getElementById("cardYes");
+
+                    const timeout = setTimeout(function () { }, Number.MAX_SAFE_INTEGER);
+
+                    let confirm;
+
+                    btNo.onclick = confirm = false, clearTimeout(timeout), card.style.display = "none";;
+                    btYes.onclick = confirm = true, clearTimeout(timeout), card.style.display = "none";;
+
+                    resolve(confirm);
+                });
+
+            response.then ((responseValue) => {
+                    if (responseValue === true) {
+                        ShoplistItem.set("objectId", itemList[i].id);
+                        quantity += itemList[i].quantity;
+                    } else {
+                        return;
+                    }   
+                })
+            .catch ((error) => {
+                console.error("Falha em adquirir resposta de caixa de diálogo. Erro de código: " + error);
+            });
+
+            break; */
+
+            if (confirm("Este item já se encontra na lista. Deseja atualizar a quantidade do item?") === true) {
                 ShoplistItem.set("objectId", itemList[i].id);
                 quantity += itemList[i].quantity;
+
                 break;
             } else {
                 return;
@@ -49,7 +80,7 @@ const pushItems = async () => {
     pullItems();
 };
 
-const card = document.querySelector(".card-background")
+/* const card = document.querySelector(".card-background")
 
 function confirmAdd () {
     card.style.display = "block";
@@ -60,25 +91,25 @@ function confirmAdd () {
     let response = null;
 
     btNo.onclick = () => {
-        response = yesOrNo(btNo);
+        response = false;
         card.style.display = "none";
     }
 
     btYes.onclick = () => {
-        response = yesOrNo(btYes);
+        response = true;
         card.style.display = "none";
     }
 
-    return response;
+    return new Promise (resolve => {response})
 }
 
-function yesOrNo (button) {
-    if (button.value == "yes") {
+function yesOrNo (buttonValue) {
+    if (buttonValue === yes) {
         return true;
     } else {
         return false;
     }
-}
+} */
 
 const pullItems = async () => {
     const ShoplistItem = Parse.Object.extend("ShoplistItem");
@@ -87,6 +118,8 @@ const pullItems = async () => {
     try {
         const results = await query.find();
         itemList = [];
+
+        console.clear();
 
         for (const object of results) {
             const id = object.id;
