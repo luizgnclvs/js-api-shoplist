@@ -35,3 +35,10 @@ button:hover {
     text-decoration: none;
     cursor: pointer;
 }
+
+#list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}

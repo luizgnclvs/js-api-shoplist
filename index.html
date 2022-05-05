@@ -12,19 +12,19 @@
 <body>
     <h1>Lista de Compras</h1><hr>
     <label for="item">Item:</label>
-    <input id="item" type="text">
+    <input id="item" type="text" placeholder="Insira um item na lista...">
     <label for="quantity">Quantidade:</label>
     <input id="quantity" type="number" value="1" min="1">
     <button id="push">Adicionar</button><hr>
 
     <div class="card-background">
         <div class="card">
-            <p>Este item já se encontra na lista. <br> Deseja atualizar a quantidade do item?</p>
+            <p id="card-text">Este item já se encontra na lista. <br> Deseja atualizar a quantidade do item?</p>
             <button id="cardNo">Não</button>
             <button id="cardYes">Sim</button>
         </div>
     </div>
 
-    <ul id="list"></ul>
+    <p id="list"></p>
 </body>
 </html>

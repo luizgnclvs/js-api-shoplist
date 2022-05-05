@@ -16,7 +16,7 @@ const pushItems = async () => {
     let quantity = parseInt(inputQty.value);
 
     inputItem.value = "";
-    inputQty.value = "";
+    inputQty.value = "1";
 
     const ShoplistItem = new Parse.Object("ShoplistItem");
 
@@ -25,7 +25,7 @@ const pushItems = async () => {
 
     for (let i = 0; i < itemList.length; i++) {
         if (item === itemList[i].item) {
-            await confirmAdd().then (
+            await confirmAdd(itemList[i].quantity, quantity).then (
                 function (value) {
                     if (value === true) {
                         ShoplistItem.set("objectId", itemList[i].id);
@@ -71,11 +71,15 @@ const pushItems = async () => {
     pullItems();
 };
 
-const card = document.querySelector(".card-background")
+const card = document.querySelector(".card-background");
+const text = document.getElementById("card-text");
+
 const btNo = document.getElementById("cardNo");
 const btYes = document.getElementById("cardYes");
 
-const confirmAdd = async () => {
+const confirmAdd = async (oldQty, newQty) => {
+    text.innerHTML += `<br>Quantidade atual: ${oldQty}. Quantidade, se atualizada: ${oldQty + newQty}`;
+
     card.style.display = "block";
 
     let response = null;
@@ -89,7 +93,6 @@ const confirmAdd = async () => {
     }
 
     while (response === null) {
-        console.log("Aguardando...")
         await sleep(1000);
     }
 
@@ -101,6 +104,7 @@ const confirmAdd = async () => {
 }
 
 function sleep(ms) {
+    console.log("Aguardando...");
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -136,13 +140,69 @@ function showItems () {
     shoppingList.innerHTML = "";
 
     for (let i = 0; i < itemList.length; i++) {
-        const li = document.createElement("li");
-        const str = document.createTextNode(
-            `${itemList[i].item} × ${itemList[i].quantity}`
+        const itemQty = document.createElement("span");
+        const itemName = document.createElement("span");
+
+        itemQty.style.marginRight = "5px";
+
+        let qty = document.createTextNode(
+            `${itemList[i].quantity}
+        `);
+
+        let name = document.createTextNode(
+            `${itemList[i].item}`
         );
 
-        li.appendChild(str);
-        shoppingList.appendChild(li);
+        itemQty.appendChild(qty);
+        itemName.appendChild(name);
+
+        const btDelete = document.createElement("button");
+        const btCheck = document.createElement("button");
+
+        btDelete.setAttribute("value", i);
+        btCheck.setAttribute("value", i);
+
+        btDelete.classList.add("delete-button");
+        btCheck.classList.add("check-button");
+
+        btDelete.setAttribute("onclick", "deleteFromList(this.value)");
+
+        const bulletPoint = document.createElement("span");
+
+        bulletPoint.setAttribute("value", i);
+
+        bulletPoint.classList.add("bullet-point");
+        bulletPoint.style.margin = "7px";
+
+        bulletPoint.appendChild(itemQty);
+        bulletPoint.appendChild(itemName);
+        bulletPoint.appendChild(btDelete);
+        bulletPoint.appendChild(btCheck);
+
+        shoppingList.appendChild(bulletPoint);
+    }
+}
+
+function deleteFromList (index) {
+    const itemPoint = document.getElementsByClassName("bullet-point")[index];
+
+    itemPoint.remove();
+
+    deleteItem(index).then(
+        pullItems()
+    );
+}
+
+const deleteItem = async (index) => {
+    const ShoplistItem = new Parse.Object("ShoplistItem");
+
+    ShoplistItem.set("objectId", itemList[index].id);
+
+    try {
+        let result = await ShoplistItem.destroy();
+        console.log("Item de ID \'" + result.id + "\' deletado com sucesso.");
+    } catch (error) {
+        console.error("Erro ao deletar item. Erro de código: " + error);
     }
 }
 
