@@ -12,54 +12,43 @@ const btPush = document.getElementById("push");
 let itemList = [];
 
 const pushItems = async () => {
-    btPush.disabled;
-    const ShoplistItem = new Parse.Object("ShoplistItem");
-
     let item = inputItem.value;
     let quantity = parseInt(inputQty.value);
 
+    inputItem.value = "";
+    inputQty.value = "";
+
+    const ShoplistItem = new Parse.Object("ShoplistItem");
+
+    let exit = false;
+    let add = false;
+
     for (let i = 0; i < itemList.length; i++) {
         if (item === itemList[i].item) {
-            /* let response = await new Promise (
-                function (resolve, reject) {
-                    card.style.display = "block";
-
-                    const btNo = document.getElementById("cardNo");
-                    const btYes = document.getElementById("cardYes");
-
-                    const timeout = setTimeout(function () { }, Number.MAX_SAFE_INTEGER);
-
-                    let confirm;
-
-                    btNo.onclick = confirm = false, clearTimeout(timeout), card.style.display = "none";;
-                    btYes.onclick = confirm = true, clearTimeout(timeout), card.style.display = "none";;
-
-                    resolve(confirm);
-                });
-
-            response.then ((responseValue) => {
-                    if (responseValue === true) {
+            await confirmAdd().then (
+                function (value) {
+                    if (value === true) {
                         ShoplistItem.set("objectId", itemList[i].id);
                         quantity += itemList[i].quantity;
+
+                        add = true;
                     } else {
-                        return;
-                    }   
-                })
-            .catch ((error) => {
-                console.error("Falha em adquirir resposta de caixa de diálogo. Erro de código: " + error);
-            });
+                        exit = true;
+                    }
+                },
 
-            break; */
+                function(error) {
+                    console.error("Não foi possível adquirir resposta da caixa de diálogo. Erro de código: " + error);
 
-            if (confirm("Este item já se encontra na lista. Deseja atualizar a quantidade do item?") === true) {
-                ShoplistItem.set("objectId", itemList[i].id);
-                quantity += itemList[i].quantity;
+                }
+            );
 
-                break;
-            } else {
-                return;
-            }
+            break;
         }
+    }
+
+    if (exit) {
+        return;
     }
 
     ShoplistItem.set("item", item);
@@ -67,49 +56,53 @@ const pushItems = async () => {
 
     try {
         let result = await ShoplistItem.save();
-        console.log("Novo objeto criado na classe \'ShoplistItem\' de ID: " + result.id);
+
+        if (add) {
+            console.log("Quantidade do objeto de ID \'" + result.id + "\' foi atualizada");
+        } else {
+            console.log("Novo objeto criado na classe \'ShoplistItem\' de ID: " + result.id);
+        }
     } catch (error) {
         console.error("Falha em criar novo objeto. Erro de código: " + error);
     }
-
-    inputItem.value = "";
-    inputQty.value = "";
 
     btPush.disabled = false;
 
     pullItems();
 };
 
-/* const card = document.querySelector(".card-background")
+const card = document.querySelector(".card-background")
+const btNo = document.getElementById("cardNo");
+const btYes = document.getElementById("cardYes");
 
-function confirmAdd () {
+const confirmAdd = async () => {
     card.style.display = "block";
-
-    const btNo = document.getElementById("cardNo");
-    const btYes = document.getElementById("cardYes");
 
     let response = null;
 
     btNo.onclick = () => {
         response = false;
-        card.style.display = "none";
     }
 
     btYes.onclick = () => {
         response = true;
-        card.style.display = "none";
     }
 
-    return new Promise (resolve => {response})
+    while (response === null) {
+        console.log("Aguardando...")
+        await sleep(1000);
+    }
+
+    console.clear();
+
+    card.style.display = "none";
+
+    return response;
 }
 
-function yesOrNo (buttonValue) {
-    if (buttonValue === yes) {
-        return true;
-    } else {
-        return false;
-    }
-} */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 const pullItems = async () => {
     const ShoplistItem = Parse.Object.extend("ShoplistItem");
@@ -127,6 +120,7 @@ const pullItems = async () => {
             const quantity = object.get("quantity");
 
             itemList.push({id, item, quantity});
+
             console.log(`ID: ${id}, Item: ${item}, Quantidade: ${quantity}`);
         }
 
@@ -153,4 +147,5 @@ function showItems () {
 }
 
 pullItems();
+
 btPush.onclick = pushItems;

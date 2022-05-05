@@ -14,16 +14,14 @@
     <label for="item">Item:</label>
     <input id="item" type="text">
     <label for="quantity">Quantidade:</label>
-    <input id="quantity" type="number">
+    <input id="quantity" type="number" value="1" min="1">
     <button id="push">Adicionar</button><hr>
-
-    <button id="myBtn">Open Modal</button>
 
     <div class="card-background">
         <div class="card">
             <p>Este item já se encontra na lista. <br> Deseja atualizar a quantidade do item?</p>
-            <button id="cardNo" value="no" onclick="yesOrNo(this.value)">Não</button>
-            <button id="cardYes" value="yes" onclick="yesOrNo(this.value)">Sim</button>
+            <button id="cardNo">Não</button>
+            <button id="cardYes">Sim</button>
         </div>
     </div>
 
