@@ -31,6 +31,8 @@ const pushItems = async () => {
                         ShoplistItem.set("objectId", itemList[i].id);
                         quantity += itemList[i].quantity;
 
+                        document.querySelector("#qty_" + itemList[i].id).innerHTML = quantity;
+
                         add = true;
                     } else {
                         exit = true;
@@ -72,13 +74,16 @@ const pushItems = async () => {
 };
 
 const card = document.querySelector(".card-background");
-const text = document.getElementById("card-text");
 
 const btNo = document.getElementById("cardNo");
 const btYes = document.getElementById("cardYes");
 
 const confirmAdd = async (oldQty, newQty) => {
-    text.innerHTML += `<br>Quantidade atual: ${oldQty}. Quantidade, se atualizada: ${oldQty + newQty}`;
+    const qty1 = document.getElementById("qty1");
+    const qty2 = document.getElementById("qty2");
+
+    qty1.innerHTML = `${oldQty}`;
+    qty2.innerHTML = `${oldQty + newQty}`;
 
     card.style.display = "block";
 
@@ -96,9 +101,9 @@ const confirmAdd = async (oldQty, newQty) => {
         await sleep(1000);
     }
 
-    console.clear();
-
     card.style.display = "none";
+
+    console.clear();
 
     return response;
 }
@@ -143,11 +148,13 @@ function showItems () {
         const itemQty = document.createElement("span");
         const itemName = document.createElement("span");
 
+        itemQty.setAttribute("id", "qty_" + itemList[i].id);
+
         itemQty.style.marginRight = "5px";
 
         let qty = document.createTextNode(
-            `${itemList[i].quantity}
-        `);
+            `${itemList[i].quantity}`
+        );
 
         let name = document.createTextNode(
             `${itemList[i].item}`
@@ -159,17 +166,17 @@ function showItems () {
         const btDelete = document.createElement("button");
         const btCheck = document.createElement("button");
 
-        btDelete.setAttribute("value", i);
-        btCheck.setAttribute("value", i);
+        btDelete.setAttribute("value", itemList[i].id);
+        btCheck.setAttribute("value", itemList[i].id);
 
         btDelete.classList.add("delete-button");
         btCheck.classList.add("check-button");
 
-        btDelete.setAttribute("onclick", "deleteFromList(this.value)");
+        btDelete.setAttribute("onclick", "deleteFromHtml(this.value)");
 
         const bulletPoint = document.createElement("span");
 
-        bulletPoint.setAttribute("value", i);
+        bulletPoint.setAttribute("id", "item_" + itemList[i].id);
 
         bulletPoint.classList.add("bullet-point");
         bulletPoint.style.margin = "7px";
@@ -183,20 +190,16 @@ function showItems () {
     }
 }
 
-function deleteFromList (index) {
-    const itemPoint = document.getElementsByClassName("bullet-point")[index];
+function deleteFromHtml (id) {
+    document.querySelector("#item_" + id).remove();
 
-    itemPoint.remove();
-
-    deleteItem(index).then(
-        pullItems()
-    );
+    deleteItem(id);
 }
 
-const deleteItem = async (index) => {
+const deleteItem = async (id) => {
     const ShoplistItem = new Parse.Object("ShoplistItem");
 
-    ShoplistItem.set("objectId", itemList[index].id);
+    ShoplistItem.set("objectId", id);
 
     try {
         let result = await ShoplistItem.destroy();
