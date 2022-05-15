@@ -5,117 +5,131 @@ Parse.initialize(
     "f91Nk0ORFT21KBVbp5fndRj15AAkd3zD9qXWeMXz"
 );
 
-const inputItem = document.getElementById("item");
-const inputQty = document.getElementById("quantity");
-const btPush = document.getElementById("push");
+const inItem = document.getElementById("item-description");
+const inQuantity = document.getElementById("item-quantity");
+const btAdd = document.getElementById("add-item");
+const btMore = document.getElementById("more-itens");
+const btLess = document.getElementById("less-itens");
+const btMore2 = document.getElementById("more-itens-two");
+const btLess2 = document.getElementById("less-itens-two");
+
+btMore.onclick = () => {
+    if (inQuantity.innerHTML < 99) {
+        inQuantity.innerHTML++;
+    }
+};
+
+btLess.onclick = () => {
+    if (inQuantity.innerHTML > 1) {
+        inQuantity.innerHTML--;
+    }
+};
+
+btLess.ondblclick = () => {
+    inQuantity.innerHTML = 1;
+};
+
+btMore2.onclick = () => {
+    if (inQuantity.innerHTML < 98) {
+        inQuantity.innerHTML = parseInt(inQuantity.innerHTML) + 2;
+    }
+};
+
+btLess2.onclick = () => {
+    if (inQuantity.innerHTML > 2) {
+        inQuantity.innerHTML -= 2;
+    }
+};
 
 let itemList = [];
 
-const pushItems = async () => {
-    let item = inputItem.value;
-    let quantity = parseInt(inputQty.value);
+const addNewItem = async () => {
+    let item = inItem.value;
+    let quantity = parseInt(inQuantity.value);
 
-    inputItem.value = "";
-    inputQty.value = "1";
+    inItem.value = "";
+    inQuantity.value = "1";
 
-    const ShoplistItem = new Parse.Object("ShoplistItem");
+    const newItem = new Parse.Object("ShoplistItem");
 
-    let exit = false;
-    let add = false;
+    let exitFunction = false;
+    let addQuantity = false;
 
     for (let i = 0; i < itemList.length; i++) {
         if (item === itemList[i].item) {
-            await confirmAdd(itemList[i].quantity, quantity).then (
-                function (value) {
-                    if (value === true) {
-                        ShoplistItem.set("objectId", itemList[i].id);
+            await confirmOption()
+                .then ((response) => {
+                    if (response === true) {
+                        newItem.set("objectId", itemList[i].id);
                         quantity += itemList[i].quantity;
 
-                        document.querySelector("#qty_" + itemList[i].id).innerHTML = quantity;
+                        document.querySelector("#quantity_" + itemList[i].id).innerHTML = quantity;
 
-                        add = true;
+                        addQuantity = true;
                     } else {
-                        exit = true;
+                        exitFunction = true;
                     }
-                },
-
-                function(error) {
+                })
+                .catch ((error) => {
                     console.error("Não foi possível adquirir resposta da caixa de diálogo. Erro de código: " + error);
-
-                }
-            );
-
+                });
             break;
         }
     }
 
-    if (exit) {
+    if (exitFunction) {
+        console.log("Operação encerrada");
         return;
     }
 
-    ShoplistItem.set("item", item);
-    ShoplistItem.set("quantity", quantity);
+    newItem.set("item", item);
+    newItem.set("quantity", quantity);
 
     try {
-        let result = await ShoplistItem.save();
+        let result = await newItem.save();
 
-        if (add) {
-            console.log("Quantidade do objeto de ID \'" + result.id + "\' foi atualizada");
+        if (addQuantity) {
+            console.log(`A quantidade do objeto de ID \'${result.id}\' foi atualizada`);
         } else {
-            console.log("Novo objeto criado na classe \'ShoplistItem\' de ID: " + result.id);
+            console.log(`Novo item de ID \'${result.id}\' adicionado à classe \'ShoplistItem\'`);
         }
     } catch (error) {
         console.error("Falha em criar novo objeto. Erro de código: " + error);
     }
 
-    btPush.disabled = false;
-
     pullItems();
 };
 
-const card = document.querySelector(".card-background");
+const confirmbox = document.querySelector(".confirmbox-background");
+const confirmboxText = document.getElementById("confirmbox-text");
+const btNo = document.getElementById("confirmbox-no");
+const btYes = document.getElementById("confirmbox-yes");
 
-const btNo = document.getElementById("cardNo");
-const btYes = document.getElementById("cardYes");
+const confirmOption = async () => {
+    confirmbox.style.display = "block";
 
-const confirmAdd = async (oldQty, newQty) => {
-    const qty1 = document.getElementById("qty1");
-    const qty2 = document.getElementById("qty2");
-
-    qty1.innerHTML = `${oldQty}`;
-    qty2.innerHTML = `${oldQty + newQty}`;
-
-    card.style.display = "block";
-
-    let response = null;
+    let confirmation = null;
 
     btNo.onclick = () => {
-        response = false;
+        confirmation = false;
     }
 
     btYes.onclick = () => {
-        response = true;
+        confirmation = true;
     }
 
-    while (response === null) {
+    while (confirmation === null) {
         await sleep(1000);
     }
 
-    card.style.display = "none";
+    confirmbox.style.display = "none";
 
-    console.clear();
-
-    return response;
-}
-
-function sleep(ms) {
-    console.log("Aguardando...");
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+    return confirmation;
+};
 
 const pullItems = async () => {
-    const ShoplistItem = Parse.Object.extend("ShoplistItem");
-    const query = new Parse.Query(ShoplistItem);
+    const shoplistItem = Parse.Object.extend("ShoplistItem");
+    const query = new Parse.Query(shoplistItem);
 
     try {
         const results = await query.find();
@@ -129,7 +143,6 @@ const pullItems = async () => {
             const quantity = object.get("quantity");
 
             itemList.push({id, item, quantity});
-
             console.log(`ID: ${id}, Item: ${item}, Quantidade: ${quantity}`);
         }
 
@@ -139,76 +152,90 @@ const pullItems = async () => {
     }
 };
 
-const shoppingList = document.getElementById("list");
+const shoppingList = document.getElementById("shoplist");
 
-function showItems () {
+const showItems = () => {
     shoppingList.innerHTML = "";
 
     for (let i = 0; i < itemList.length; i++) {
-        const itemQty = document.createElement("span");
+        const itemQuantity = document.createElement("span");
         const itemName = document.createElement("span");
+        const editName = document.createElement("input");
+        const btEdit = document.createElement("span");
+        const btDelete = document.createElement("span");
+        const btAddCart = document.createElement("span");
 
-        itemQty.setAttribute("id", "qty_" + itemList[i].id);
+        itemQuantity.setAttribute("id", "quantity_" + itemList[i].id);
+        itemName.setAttribute("id", "name_" + itemList[i].id);
+        editName.setAttribute("id", "inEdit_" + itemList[i].id);
+        btEdit.setAttribute("id", "edit_" + itemList[i].id);
+        btDelete.setAttribute("id", "delete_" + itemList[i].id);
+        btAddCart.setAttribute("id", "add-cart_" + itemList[i].id);
 
-        itemQty.style.marginRight = "5px";
+        btEdit.classList.add("material-symbols-outlined");
+        btDelete.classList.add("material-symbols-outlined");
+        btAddCart.classList.add("material-symbols-outlined");
 
-        let qty = document.createTextNode(
-            `${itemList[i].quantity}`
-        );
+        itemQuantity.innerHTML = `${itemList[i].quantity}`;
+        itemName.innerHTML = `${itemList[i].item}`;
+        btEdit.innerHTML = "edit";
+        btDelete.innerHTML = "delete";
+        btAddCart.innerHTML = "add_shopping_cart";
 
-        let name = document.createTextNode(
-            `${itemList[i].item}`
-        );
+        btEdit.setAttribute("onclick", "editItem(this.id)");
+        btDelete.setAttribute("onclick", "deleteItem(this.id)");
+        btAddCart.setAttribute("onclick", "addToCart(this.id");
 
-        itemQty.appendChild(qty);
-        itemName.appendChild(name);
+        const startBar = document.createElement("label");
+        startBar.appendChild(itemQuantity);
+        startBar.appendChild(itemName);
+        startBar.appendChild(editName);
 
-        const btDelete = document.createElement("button");
-        const btCheck = document.createElement("button");
+        const endBar = document.createElement("div");
+        endBar.appendChild(btEdit);
+        endBar.appendChild(btDelete);
+        endBar.appendChild(btAddCart);
 
-        btDelete.setAttribute("value", itemList[i].id);
-        btCheck.setAttribute("value", itemList[i].id);
+        const itemBar = document.createElement("li");
+        itemBar.setAttribute("id", "item_" + itemList[i].id);
 
-        btDelete.classList.add("delete-button");
-        btCheck.classList.add("check-button");
+        itemBar.appendChild(startBar);
+        itemBar.appendChild(endBar);
 
-        btDelete.setAttribute("onclick", "deleteFromHtml(this.value)");
-
-        const bulletPoint = document.createElement("span");
-
-        bulletPoint.setAttribute("id", "item_" + itemList[i].id);
-
-        bulletPoint.classList.add("bullet-point");
-        bulletPoint.style.margin = "7px";
-
-        bulletPoint.appendChild(itemQty);
-        bulletPoint.appendChild(itemName);
-        bulletPoint.appendChild(btDelete);
-        bulletPoint.appendChild(btCheck);
-
-        shoppingList.appendChild(bulletPoint);
+        shoppingList.appendChild(itemBar);
     }
-}
+};
 
-function deleteFromHtml (id) {
+const deleteItem = (id) => {
+    id = idSplitter(id);
     document.querySelector("#item_" + id).remove();
+    deleteItemAPI(id);
+};
 
-    deleteItem(id);
-}
+const deleteItemAPI = async (id) => {
+    const deletedItem = new Parse.Object("ShoplistItem");
 
-const deleteItem = async (id) => {
-    const ShoplistItem = new Parse.Object("ShoplistItem");
-
-    ShoplistItem.set("objectId", id);
+    deletedItem.set("objectId", id);
 
     try {
-        let result = await ShoplistItem.destroy();
-        console.log("Item de ID \'" + result.id + "\' deletado com sucesso.");
+        let result = await deletedItem.destroy();
+        console.log(`Item de ID \'${result.id}\' destruído com sucesso.`);
     } catch (error) {
-        console.error("Erro ao deletar item. Erro de código: " + error);
+        console.error("Erro ao destruir item. Erro de código: " + error);
     }
-}
+};
+
+const editItem = () => {
+
+};
+
+const idSplitter = (id) => {
+    return id.split("_")[1];
+};
+
+const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 pullItems();
-
-btPush.onclick = pushItems;
+btAdd.onclick = addNewItem;
