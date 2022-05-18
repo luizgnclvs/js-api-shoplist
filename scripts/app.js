@@ -1,10 +1,3 @@
-Parse.serverURL = "https://parseapi.back4app.com";
-
-Parse.initialize(
-    "pKFaqVGBWNehVkuNPTOhgg1xeRniu8fasw2N2bwX",
-    "f91Nk0ORFT21KBVbp5fndRj15AAkd3zD9qXWeMXz"
-);
-
 const inItem = document.getElementById("item-description");
 const inQuantity = document.getElementById("item-quantity");
 const btAdd = document.getElementById("add-item");

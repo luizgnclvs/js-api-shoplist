@@ -9,6 +9,10 @@ body {
     background: #aaa492;
 }
 
+.main-app {
+    display: none;
+}
+
 .title {
     width: 100vw;
     position: sticky;

@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Shoplist</title>
-    <script src="script.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.1/parse.min.js"></script>
-    <link rel="stylesheet" href="style.css"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopList - LogIn</title>
+    <script type="text/javascript" src="./scripts/index.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.1/parse.min.js"></script>
+    <link rel="stylesheet" href="./styles/index.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </head>
 <body>
-    <div class="title">
-        <h1>Shoplist</h1>
-    </div>
-    <div class="add-item-menu">
-        <span id="less-itens-two" class="material-symbols-outlined">exposure_neg_2</span>
-        <div class="quantity">
-            <span id="more-itens" class="material-symbols-outlined">arrow_drop_up</span>
-            <span id="item-quantity">1</span>
-            <span id="less-itens" class="material-symbols-outlined">arrow_drop_down</span>
-        </div>
-        <span id="more-itens-two" class="material-symbols-outlined">exposure_plus_2</span>
-        <input id="item-description" type="text" placeholder="Insira um item na lista...">
-        <span id="add-item" class="material-symbols-outlined">double_arrow</span>
-    </div>
-    <div class="confirmbox-background">
-        <div class="confirmbox">
-            <span id="confirmbox-text"></span>
-            <span id="confirmbox-no" class="material-symbols-outlined"></span>
-            <span id="confirmbox-yes" class="material-symbols-outlined"></span>
-        </div>
-    </div>
+    <div class="login">
+        <form name="signup">
+            <label for="signup-username">Nome de Usuário:
+                <input type="text" name="signup-username" required />
+            </label>
+            <label for="signup-email">E-mail:
+                <input type="email" name="signup-email" required />
+            </label>
+            <label for="signup-passphrase">Senha:
+                <input type="password" name="signup-passphrase" required />
+                <span id="reveal-signup-passphrase" class="material-symbols-outlined">visibility_off</span>
+            </label>
+            <label for="confirm-passphrase">Confirme a Senha:
+                <input type="password" name="confirm-passphrase" required />
+                <span id="reveal-confirm-passphrase" class="material-symbols-outlined">visibility_off</span>
+            </label>
+            <input type="submit" name="signup-submit" value="Criar Conta" />
+        </form>
 
-    <ul id="shoplist"></ul>
+
+
+
+        <form id="sign-in" name="sign-in">
+            <label for="username">Nome de Usuário:
+                <input type="text" name="username" required />
+            </label>
+            <label for="passphrase">Senha:
+                <input type="password" name="passphrase" required />
+            </label>
+            <input type="submit" value="Entrar" />
+        </form>
+    </div>
+    
 </body>
 </html>
