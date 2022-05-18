@@ -6,28 +6,15 @@ Parse.initialize(
 );
 
 const signUpForm = document.querySelector("[name=signup]");
-const inPassPhrase = document.querySelector("[name=signup-passphrase]");
-const inConfirmPass = document.querySelector("[name=confirm-passphrase]");
 
 signUpForm.addEventListener("submit", (event) => {
     event.preventDefault();
-
-    if (inPassPhrase.value !== inConfirmPass.value) {
-        inPassPhrase.classList.add("invalid-input");
-        inConfirmPass.classList.add("invalid-input");
-    } else {
-        new FormData(signUpForm);
-    }
+    new FormData(signUpForm);
 });
 
 signUpForm.addEventListener("formdata", (event) => {
     let data = event.formData;
     signUpForm.reset();
-
-    for (const key of data.keys()) {
-        console.log(`${key}: ${data.get(key)}`);
-    }
-
     signUp(data);
 });
 
@@ -46,34 +33,37 @@ const signUp = async (data) => {
     }
 };
 
-const passReveal = document.getElementById("reveal-signup-passphrase");
-const confirmPassReveal = document.getElementById("reveal-confirm-passphrase");
+let passwords = [
+    {reveal: document.getElementById("reveal-signup-passphrase"), 
+    input: document.querySelector("[name=signup-passphrase]"),
+    linkedInput: document.querySelector("[name=confirm-passphrase]")}, 
+    {reveal: document.getElementById("reveal-confirm-passphrase"), 
+    input: document.querySelector("[name=confirm-passphrase]"),
+    linkedInput: document.querySelector("[name=signup-passphrase]")}
+];
 
-inPassPhrase.onfocus = () => {
-    inPassPhrase.classList.remove("invalid-input");
-    inConfirmPass.classList.remove("invalid-input");
-};
+passwords.forEach(object => {
+    object.reveal.addEventListener("mousedown", () => {
+        object.input.setAttribute("type", "text");
+    });
 
-inConfirmPass.onfocus = () => {
-    inPassPhrase.classList.remove("invalid-input");
-    inConfirmPass.classList.remove("invalid-input");
-};
+    object.reveal.addEventListener("mouseup", () => {
+        object.input.setAttribute("type", "password");
+        object.input.focus();
+    });
 
-passReveal.onmousedown = () => {
-    inPassPhrase.setAttribute("type", "text");
-};
-
-passReveal.onmouseup = () => {
-    inPassPhrase.setAttribute("type", "password");
-};
-
-confirmPassReveal.onmousedown = () => {
-    inConfirmPass.setAttribute("type", "text");
-};
-
-confirmPassReveal.onmouseup = () => {
-    inConfirmPass.setAttribute("type", "password");
-};
+    object.input.addEventListener("input", () => {
+        if (object.input.value !== object.linkedInput.value) {
+            document.querySelector("[name=signup-submit]").disabled = true;
+            object.input.classList.add("invalid-input");
+            object.linkedInput.classList.add("invalid-input");
+        } else {
+            document.querySelector("[name=signup-submit]").disabled = false;
+            object.input.classList.remove("invalid-input");
+            object.linkedInput.classList.remove("invalid-input");
+        }
+    });
+});
 
 
 
