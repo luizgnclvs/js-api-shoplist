@@ -5,6 +5,28 @@ Parse.initialize(
     "f91Nk0ORFT21KBVbp5fndRj15AAkd3zD9qXWeMXz"
 );
 
+const signInForm = document.querySelector("[name=signin]");
+
+signInForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    new FormData(signInForm);
+});
+
+signInForm.addEventListener("formdata", (event) => {
+    let data = event.formData;
+    signInForm.reset();
+    signIn(data);
+});
+
+const signIn = async (data) => {
+    try {
+        let user = await Parse.User.logIn(data.get("signin-username"), data.get("signin-passphrase"))
+        console.log(`Login do usuário de nome \'${user.get("username")}\' e e-mail \'${user.get("email")}\' realizado com sucesso.`);
+    } catch (error) {
+            console.error(`Falha ao realizar login. Erro de código: ${error.code} - ${error.message}`);
+    }
+};
+
 const signUpForm = document.querySelector("[name=signup]");
 
 signUpForm.addEventListener("submit", (event) => {
@@ -33,63 +55,57 @@ const signUp = async (data) => {
     }
 };
 
-let passwords = [
+const btResetPassword = document.getElementById("reset-passphrase");
+
+const resetPassphrase = () => {
+    Parse.User.requestPasswordReset("email");
+
+    try {
+        console.log("Requisição de redefiniçaõ de senha enviada com sucesso.");
+    } catch (error) {
+        console.error(`A requisção falhou. Erro de código: ${error.code} - ${error.message}`);
+    }
+};
+
+let revealPasswords = [
     {reveal: document.getElementById("reveal-signup-passphrase"), 
-    input: document.querySelector("[name=signup-passphrase]"),
-    linkedInput: document.querySelector("[name=confirm-passphrase]")}, 
+    input: document.querySelector("[name=signup-passphrase]")},
     {reveal: document.getElementById("reveal-confirm-passphrase"), 
-    input: document.querySelector("[name=confirm-passphrase]"),
-    linkedInput: document.querySelector("[name=signup-passphrase]")}
+    input: document.querySelector("[name=confirm-passphrase]")},
+    {reveal: document.getElementById("reveal-signin-passphrase"),
+    input: document.querySelector("[name=signin-passphrase]")}
 ];
 
-passwords.forEach(object => {
+revealPasswords.forEach(object => {
     object.reveal.addEventListener("mousedown", () => {
         object.input.setAttribute("type", "text");
+        object.reveal.innerHTML = "visibility";
     });
 
     object.reveal.addEventListener("mouseup", () => {
         object.input.setAttribute("type", "password");
+        object.reveal.innerHTML = "visibility_off";
         object.input.focus();
     });
+});
 
+let matchPasswords = [
+    {input: document.querySelector("[name=signup-passphrase]"),
+    match: document.querySelector("[name=confirm-passphrase]")},
+    {input: document.querySelector("[name=confirm-passphrase]"),
+    match: document.querySelector("[name=signup-passphrase]")}
+];
+
+matchPasswords.forEach(object => {
     object.input.addEventListener("input", () => {
-        if (object.input.value !== object.linkedInput.value) {
+        if ((object.input.value !== object.match.value) && object.input.value !== "" && object.match.value !== "") {
             document.querySelector("[name=signup-submit]").disabled = true;
             object.input.classList.add("invalid-input");
-            object.linkedInput.classList.add("invalid-input");
+            object.match.classList.add("invalid-input");
         } else {
             document.querySelector("[name=signup-submit]").disabled = false;
             object.input.classList.remove("invalid-input");
-            object.linkedInput.classList.remove("invalid-input");
+            object.match.classList.remove("invalid-input");
         }
     });
 });
-
-
-
-
-
-const signInForm = document.getElementById("sign-in");
-
-signInForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    new FormData(signInForm);
-});
-
-signInForm.addEventListener("formdata", (event) => {
-    let data = event.formData;
-    signInForm.reset();
-
-    signIn(data);
-});
-
-const signIn = (data) => {
-    let user = Parse.User
-        .logIn(data.get("username"), data.get("passphrase"))
-        .then((user) => {
-            console.log(`Login do usuário de nome \'${user.username}\' e e-mail \'${user.email}\' realizado com sucesso.`);
-        })
-        .catch((error) => {
-            console.error(`Falha ao realizar login. Erro de código: ${error.code} - ${error.message}`);
-        });
-};
