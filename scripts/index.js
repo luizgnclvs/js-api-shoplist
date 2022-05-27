@@ -109,3 +109,33 @@ matchPasswords.forEach(object => {
         }
     });
 });
+
+const clipHeader = () => {
+    let width = window.innerWidth;
+    let segments = Math.floor(width / 80);
+
+    if (segments % 2 === 0) {
+        segments++;
+    }
+
+    let clipPath = [];
+    clipPath[0] = "polygon(0 30px";
+    clipPath[segments] = " 100% 0";
+    clipPath[segments + 1] = " 100% calc(100% - 30px)";
+    clipPath[segments * 2 + 1] = " 0 100%)";
+
+    for (let i = 1; i < segments; i++) {
+        if (i % 2 === 0) {
+            clipPath[i] = " " + (100 / segments * i) + "% 30px";
+            clipPath[((segments * 2) + 1) - i] = " " + (100 / segments * i) + "% 100%";
+        } else {
+            clipPath[i] = " " + (100 / segments * i) + "% 0";
+            clipPath[((segments * 2) + 1) - i] = " " + (100 / segments * i) + "% calc(100% - 30px)";
+        }
+    }
+
+    document.querySelector(".header").style.clipPath = clipPath;
+};
+
+clipHeader();
+window.onresize = clipHeader;
