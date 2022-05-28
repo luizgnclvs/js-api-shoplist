@@ -71,14 +71,31 @@ document.querySelector(".container-head").childNodes.forEach(element => {
     element.addEventListener("click", () => {
         let index = Array.from(element.parentElement.children).indexOf(element);
         let form = Array.from(element.parentElement.nextElementSibling.children)[index];
-        
-        if (form.previousElementSibling) {
+
+        element.style.color = "var(--secondary-color)"
+        element.style.backgroundColor = "var(--primary-color)";
+
+        if (element.previousElementSibling) {
+            element.previousElementSibling.style.color = "var(--primary-color)";
+            element.previousElementSibling.style.backgroundColor = "var(--secondary-color)";
             form.previousElementSibling.style.display = "none";
         } else {
+            element.nextElementSibling.style.color = "var(--primary-color)"
+            element.nextElementSibling.style.backgroundColor = "var(--secondary-color)";
             form.nextElementSibling.style.display = "none";
         }
 
         form.style.display = "flex";
+    });
+});
+
+document.querySelectorAll(".container label").forEach(element => {
+    element.addEventListener("click", () => {
+        Array.from(element.children).forEach(child => {
+            if (child.nodeName === "INPUT") {
+                child.focus();
+            }
+        })
     });
 });
 
