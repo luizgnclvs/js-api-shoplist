@@ -67,6 +67,21 @@ const resetPassphrase = () => {
     }
 };
 
+document.querySelector(".container-head").childNodes.forEach(element => {
+    element.addEventListener("click", () => {
+        let index = Array.from(element.parentElement.children).indexOf(element);
+        let form = Array.from(element.parentElement.nextElementSibling.children)[index];
+        
+        if (form.previousElementSibling) {
+            form.previousElementSibling.style.display = "none";
+        } else {
+            form.nextElementSibling.style.display = "none";
+        }
+
+        form.style.display = "flex";
+    });
+});
+
 let revealPasswords = [
     {reveal: document.getElementById("reveal-signup-passphrase"), 
     input: document.querySelector("[name=signup-passphrase]")},

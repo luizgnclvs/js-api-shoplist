@@ -1,13 +1,15 @@
-@import url("fonts.css");
+@import url('fonts.css');
 
 :root {
-    font-family: "subjectivity_serifmedium";
-    color: #9a9483;
+    font-family: 'subjectivity_serifmedium', Arial, Helvetica, sans-serif;
+    color: #362222;
 }
 
 body {
     margin: 0;
     padding: 0;
+    background: rgb(154,148,131);
+    background: linear-gradient(60deg, rgba(154,148,131,1) 15%, rgba(199,190,162,1) 59%, rgba(229,220,195,1) 90%);
 }
 
 .material-symbols-outlined, input[type=submit] {
@@ -22,7 +24,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to right, #2b2b2b77, #2b2b2b, #171010);
+    background: rgb(23,16,16) linear-gradient(120deg, rgba(23,16,16,1) 15%, rgba(43,43,43,1) 45%, rgba(54,34,34,1) 90%) no-repeat;  
 }
 
 .header span {
@@ -32,12 +34,46 @@ body {
     font-weight: 500;
     letter-spacing: 3vw;
     text-transform: uppercase;
+    color: #c7bea2;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-head {
+    margin: 0 0 0.75rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container-head span {
+    width: 8rem;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    box-shadow: #36222274 2px -2px 5px;
+    cursor: pointer;
+}
+
+.container-head :first-child {
+    background: #362222;
+    color: #c7bea2;
+}
+
+.container-head :nth-child(2) {
+    color: #362222;
 }
 
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+[name=signup] {
+    display: none;
 }
 
 label {
@@ -52,17 +88,6 @@ input {
     border: red solid 2px;
 }
 
-/* clip-path: polygon(
-        0 30px,
-        20% 0,
-        40% 30px,
-        60% 0,
-        80% 30px,
-        100% 0,
-        100% calc(100% - 30px),
-        80% 100%,
-        60% calc(100% - 30px),
-        40% 100%,
-        20% calc(100% - 30px),
-        0 100%
-    ); */
+input[type=submit] {
+    all: unset;
+}

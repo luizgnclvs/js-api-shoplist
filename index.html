@@ -15,41 +15,41 @@
     <div class="header">
         <span>shoplist</span>
     </div>
-    <form name="signin">
-        <label for="signin-username">Nome de Usuário:
-            <input type="text" name="signin-username" required/>
-        </label>
-        <label for="signin-passphrase">Senha:
-            <input type="password" name="signin-passphrase" required/>
-            <span id="reveal-signin-passphrase" class="material-symbols-outlined">visibility_off</span>
-        </label>
-        <input type="submit" name="signin-submit" value="Entrar"/>
-    </form>
-
-
-    <form name="signup">
-        <label for="signup-username">Nome de Usuário:
-            <input type="text" name="signup-username" required/>
-        </label>
-        <label for="signup-email">E-mail:
-            <input type="email" name="signup-email" required/>
-        </label>
-        <label for="signup-passphrase">Senha:
-            <input type="password" name="signup-passphrase" required/>
-            <span id="reveal-signup-passphrase" class="material-symbols-outlined">visibility_off</span>
-        </label>
-        <label for="confirm-passphrase">Confirme a Senha:
-            <input type="password" name="confirm-passphrase" required/>
-            <span id="reveal-confirm-passphrase" class="material-symbols-outlined">visibility_off</span>
-        </label>
-        <input type="submit" name="signup-submit" value="Criar Conta"/>
-    </form>
-
-
-
-
-    
-
-    <span id="reset-passphrase">oi</span>
+    <div class="container">
+        <div class="container-head">
+            <span>Entrar</span>
+            <span>Cadastrar</span>
+        </div>
+        <div class="container-body">
+            <form name="signin">
+                <label for="signin-username">Nome de Usuário:
+                    <input type="text" name="signin-username" required/>
+                </label>
+                <label for="signin-passphrase">Senha:
+                    <input type="password" name="signin-passphrase" required/>
+                    <span id="reveal-signin-passphrase" class="material-symbols-outlined">visibility_off</span>
+                </label>
+                <input type="submit" name="signin-submit" value="Entrar"/>
+                <span id="reset-passphrase">oi</span>
+            </form>
+            <form name="signup">
+                <label for="signup-username">Nome de Usuário:
+                    <input type="text" name="signup-username" required/>
+                </label>
+                <label for="signup-email">E-mail:
+                    <input type="email" name="signup-email" required/>
+                </label>
+                <label for="signup-passphrase">Senha:
+                    <input type="password" name="signup-passphrase" required/>
+                    <span id="reveal-signup-passphrase" class="material-symbols-outlined">visibility_off</span>
+                </label>
+                <label for="confirm-passphrase">Confirme a Senha:
+                    <input type="password" name="confirm-passphrase" required/>
+                    <span id="reveal-confirm-passphrase" class="material-symbols-outlined">visibility_off</span>
+                </label>
+                <input type="submit" name="signup-submit" value="Criar Conta"/>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
