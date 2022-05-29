@@ -22,33 +22,57 @@
         </div>
         <div class="container-body">
             <form name="signin">
-                <label for="signin-username">Nome de Usuário:
+                <label for="signin-username">
+                    <span>Nome de Usuário:</span>
                     <input type="text" name="signin-username" required/>
                 </label>
-                <label for="signin-passphrase">Senha:
+                <label for="signin-passphrase">
+                    <span>Senha:</span>
                     <input type="password" name="signin-passphrase" required/>
-                    <span id="reveal-signin-passphrase" class="material-symbols-outlined">visibility_off</span>
+                    <span id="reveal-signin-passphrase" class="material-symbols-outlined reveal">visibility_off</span>
                 </label>
                 <input type="submit" name="signin-submit" value="Entrar"/>
-                <span id="reset-passphrase">oi</span>
+                <span id="reset-passphrase">Esqueceu a Senha?</span>
             </form>
             <form name="signup">
-                <label for="signup-username">Nome de Usuário:
+                <label for="signup-username">
+                    <span>Nome de Usuário:</span>
                     <input type="text" name="signup-username" required/>
                 </label>
-                <label for="signup-email">E-mail:
+                <label for="signup-email">
+                    <span>E-mail:</span>
                     <input type="email" name="signup-email" required/>
                 </label>
-                <label for="signup-passphrase">Senha:
+                <label for="signup-passphrase">
+                    <span>Senha:</span>
                     <input type="password" name="signup-passphrase" required/>
-                    <span id="reveal-signup-passphrase" class="material-symbols-outlined">visibility_off</span>
+                    <span id="reveal-signup-passphrase" class="material-symbols-outlined reveal">visibility_off</span>
                 </label>
-                <label for="confirm-passphrase">Confirme a Senha:
+                <label for="confirm-passphrase">
+                    <span>Confirme a Senha:</span>
                     <input type="password" name="confirm-passphrase" required/>
-                    <span id="reveal-confirm-passphrase" class="material-symbols-outlined">visibility_off</span>
+                    <span id="reveal-confirm-passphrase" class="material-symbols-outlined reveal">visibility_off</span>
                 </label>
                 <input type="submit" name="signup-submit" value="Criar Conta"/>
             </form>
+        </div>
+    </div>
+    <div class="reset">
+        <div class="container">
+            <div class="container-head">
+                <span>Redefinir Senha</span>
+                <span class="material-symbols-outlined">close</span>
+            </div>
+            <div class="container-body">
+                <form name="reset">
+                    <label for="reset-email">
+                        <span>E-mail:</span>
+                        <input type="email" name="reset-email" required>
+                    </label>
+                    <input type="submit" name="reset-submit" value="Redefinir">
+                </form>
+                <p></p>
+            </div>
         </div>
     </div>
 </body>

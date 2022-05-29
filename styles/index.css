@@ -1,13 +1,14 @@
 @import url('fonts.css');
 
 :root {
-    font-family: 'subjectivity_serifmedium', Arial, Helvetica, sans-serif;
     --primary-color: #c7bea2;
     --secondary-color: #362222;
     --header-color-1: #171010;
     --header-color-2: #2b2b2b;
     --body-color-1: #9a9483;
     --body-color-2: #e5dcc3;
+    --shadow-color: #362222;
+    font-family: 'subjectivity_serifmedium', Arial, Helvetica, sans-serif;
     color: var(--secondary-color);
 }
 
@@ -43,24 +44,25 @@ body {
 }
 
 .container {
-    width: 23rem;
-    margin: 0 calc((100vw - 23rem) / 2);
+    width: 90vw;
+    margin: 5rem 5vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background: var(--primary-color);
-    box-shadow: 3px 3px 5px var(--secondary-color);
+    box-shadow: 3px 3px 5px var(--shadow-color);
 }
 
 .container-head {
+    width: inherit;
     margin: 0 0 0.75rem 0;
     display: flex;
     justify-content: center;
 }
 
 .container-head span {
-    width: 8.5rem;
+    width: 50%;
     padding: 1rem 1.5rem;
     text-align: center;
     cursor: pointer;
@@ -76,28 +78,75 @@ body {
     background: var(--secondary-color);
 }
 
-.container label {
-    height: 1rem;
-    width: 19.5rem;
-    margin: 0.25rem 1rem;
-    padding: 0.75rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border: 2px solid var(--secondary-color);
-    white-space: nowrap;
-    user-select: none;
-    cursor: pointer;
-}
-
 .container-body {
     width: inherit;
+    padding: 0 0 1.5rem;
+    transition: all 0.5s ease-out;
 }
 
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.container label {
+    height: 2.5rem;
+    width: calc(100% - 3.75rem);
+    margin: 0.25rem 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--primary-color);
+    background: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+    white-space: nowrap;
+    user-select: none;
+    cursor: text;
+}
+
+.container label span {
+    height: calc(100% - 1.5rem);
+    min-width: 30%;
+    max-width: 30%;
+    padding: 0.75rem;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    text-align: center;
+}
+
+.reveal {
+    min-width: 1.5rem !important;
+    max-width: 1.5rem !important;
+    padding: calc(0.75rem - 2px) 0.75rem calc(0.75rem + 2px) !important;
+}
+
+.container label input {
+    padding: 0 0 0 1.5rem;
+    font-size: 0.8rem;
+}
+
+input[type=password] {
+    font-weight: bold;
+    letter-spacing: 0.3rem;
+}
+
+input[type=submit] {
+    margin: 1.5rem 1.5rem 0.5rem;
+    padding: 0.75rem 1.95rem;
+    border: 2px solid var(--secondary-color);
+}
+
+.container label span:hover, .reveal:hover, input[type=submit]:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+#reset-passphrase {
+    font-size: 0.7rem;
+    text-decoration: underline var(--secondary-color) solid 1.5px;
+    cursor: pointer;
 }
 
 [name=signup] {
@@ -112,6 +161,42 @@ input {
     overflow: hidden;
 }
 
-.invalid-input {
+.reset {
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background: rgba(0,0,0,0.4);
+}
+
+.reset .container-head {
+    justify-content: space-between;
+}
+
+.container-head span.material-symbols-outlined {
+    min-width: 1.5rem;
+    max-width: 1.5rem;
+}
+
+.container-head span.material-symbols-outlined:hover {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.invalid {
+    border: red solid 2px !important;
+}
+
+input[type=submit]:disabled {
+    background: red;
     border: red solid 2px;
+    opacity: 0.75;
+    color: #c7bea2;
+    cursor: no-drop;
 }

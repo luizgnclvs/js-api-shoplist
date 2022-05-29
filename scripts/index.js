@@ -57,13 +57,17 @@ const signUp = async (data) => {
 
 const btResetPassword = document.getElementById("reset-passphrase");
 
+btResetPassword.onclick = () => {
+    document.querySelector(".reset").style.display = "flex";
+};
+
 const resetPassphrase = () => {
     Parse.User.requestPasswordReset("email");
 
     try {
         console.log("Requisição de redefiniçaõ de senha enviada com sucesso.");
     } catch (error) {
-        console.error(`A requisção falhou. Erro de código: ${error.code} - ${error.message}`);
+        console.error(`A requisição falhou. Erro de código: ${error.code} - ${error.message}`);
     }
 };
 
@@ -123,24 +127,35 @@ revealPasswords.forEach(object => {
 
 let matchPasswords = [
     {input: document.querySelector("[name=signup-passphrase]"),
-    match: document.querySelector("[name=confirm-passphrase]")},
+    match: document.querySelector("[name=confirm-passphrase]"),
+    label1: document.querySelector("[for=signup-passphrase]"),
+    label2: document.querySelector("[for=confirm-passphrase]")},
     {input: document.querySelector("[name=confirm-passphrase]"),
-    match: document.querySelector("[name=signup-passphrase]")}
+    match: document.querySelector("[name=signup-passphrase]"),
+    label1: document.querySelector("[for=confirm-passphrase]"),
+    label2: document.querySelector("[for=signup-passphrase]")}
 ];
 
 matchPasswords.forEach(object => {
     object.input.addEventListener("input", () => {
         if ((object.input.value !== object.match.value) && object.input.value !== "" && object.match.value !== "") {
+            console.log("oi");
             document.querySelector("[name=signup-submit]").disabled = true;
-            object.input.classList.add("invalid-input");
-            object.match.classList.add("invalid-input");
+            document.querySelector("[name=signup-submit]").value = "Confira as Senhas";
+            object.label1.classList.add("invalid");
+            object.label2.classList.add("invalid");
         } else {
             document.querySelector("[name=signup-submit]").disabled = false;
-            object.input.classList.remove("invalid-input");
-            object.match.classList.remove("invalid-input");
+            document.querySelector("[name=signup-submit]").value = "Criar Conta";
+            object.label1.classList.remove("invalid");
+            object.label2.classList.remove("invalid");
         }
     });
 });
+
+document.querySelector(".container-head span.material-symbols-outlined").onclick = () => {
+    document.querySelector(".reset").style.display = "none";
+};
 
 const clipHeader = () => {
     let width = window.innerWidth;
