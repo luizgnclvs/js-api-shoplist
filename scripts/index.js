@@ -22,8 +22,12 @@ const signIn = async (data) => {
     try {
         let user = await Parse.User.logIn(data.get("signin-username"), data.get("signin-passphrase"))
         console.log(`Login do usuário de nome \'${user.get("username")}\' e e-mail \'${user.get("email")}\' realizado com sucesso.`);
+        location.href = "./html/app.html"
     } catch (error) {
             console.error(`Falha ao realizar login. Erro de código: ${error.code} - ${error.message}`);
+            if (error.code === 205) {
+                alert("Por favor, verifique seu e-mail.");
+            }
     }
 };
 
@@ -57,17 +61,33 @@ const signUp = async (data) => {
 
 const btResetPassword = document.getElementById("reset-passphrase");
 
+const resetForm = document.querySelector("[name=reset]");
+
+resetForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    new FormData(resetForm);
+});
+
+resetForm.addEventListener("formdata", (event) => {
+    let data = event.formData;
+    resetForm.reset();
+    document.querySelector(".reset").style.display = "none";
+    resetPassphrase(data);
+});
+
 btResetPassword.onclick = () => {
     document.querySelector(".reset").style.display = "flex";
 };
 
-const resetPassphrase = () => {
-    Parse.User.requestPasswordReset("email");
+const resetPassphrase = (data) => {
+    Parse.User.requestPasswordReset(data.get("reset-email"));
 
     try {
         console.log("Requisição de redefiniçaõ de senha enviada com sucesso.");
+        alert("Requisição enviada com sucesso. Verifique seu e-mail.");
     } catch (error) {
         console.error(`A requisição falhou. Erro de código: ${error.code} - ${error.message}`);
+        alert("Falha na requisição. Você tem certeza que inseriu o e-mail correto?");
     }
 };
 
@@ -139,7 +159,6 @@ let matchPasswords = [
 matchPasswords.forEach(object => {
     object.input.addEventListener("input", () => {
         if ((object.input.value !== object.match.value) && object.input.value !== "" && object.match.value !== "") {
-            console.log("oi");
             document.querySelector("[name=signup-submit]").disabled = true;
             document.querySelector("[name=signup-submit]").value = "Confira as Senhas";
             object.label1.classList.add("invalid");

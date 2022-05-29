@@ -191,12 +191,17 @@ input {
 
 .invalid {
     border: red solid 2px !important;
+    background: red !important;
 }
 
 input[type=submit]:disabled {
     background: red;
     border: red solid 2px;
-    opacity: 0.75;
+    opacity: 0.5;
     color: #c7bea2;
     cursor: no-drop;
 }
+
+input:-webkit-autofill, input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }

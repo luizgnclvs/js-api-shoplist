@@ -1,3 +1,5 @@
+@import url('./fonts.css');
+
 * {
     font-family: "subjectivity_serifmedium";
     color: #2b2b2b;
@@ -117,21 +119,4 @@ button:hover {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-}
-/* here */
-
-@font-face {
-    font-family: 'subjectivity_serifmedium';
-    src: url('./assets/fonts/subjectivityserif-medium-webfont.woff2') format('woff2'),
-         url('./assets/fonts/subjectivityserif-medium-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'subjectivity_serifsuper';
-    src: url('./assets/fonts/subjectivityserif-super-webfont.woff2') format('woff2'),
-         url('./assets/fonts/subjectivityserif-super-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
 }
