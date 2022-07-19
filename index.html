@@ -7,7 +7,16 @@
     <title>ShopList</title>
     <script type="text/javascript" src="./scripts/index.js" defer></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.1/parse.min.js"></script>
-    <link rel="stylesheet" href="./styles/index.css"/>
+    <script>
+        Parse.serverURL = "https://parseapi.back4app.com";
+
+        Parse.initialize(
+            "pKFaqVGBWNehVkuNPTOhgg1xeRniu8fasw2N2bwX",
+            "f91Nk0ORFT21KBVbp5fndRj15AAkd3zD9qXWeMXz"
+        );
+    </script>
+    <link rel="stylesheet" media="not screen and (hover: none)" href="./styles/index-desktop.css"/>
+    <link rel="stylesheet" media="only screen and (hover: none)" href="./styles/index-mobile.css"/>
     <link rel="icon" href="./assets/logo.png"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,500,0,0"/>
 </head>
@@ -23,7 +32,7 @@
         <div class="container-body">
             <form name="signin">
                 <label for="signin-username">
-                    <span>Nome de Usuário:</span>
+                    <span>Usuário:</span>
                     <input type="text" name="signin-username" required/>
                 </label>
                 <label for="signin-passphrase">
@@ -36,7 +45,7 @@
             </form>
             <form name="signup">
                 <label for="signup-username">
-                    <span>Nome de Usuário:</span>
+                    <span>Usuário:</span>
                     <input type="text" name="signup-username" required/>
                 </label>
                 <label for="signup-email">
@@ -49,7 +58,7 @@
                     <span id="reveal-signup-passphrase" class="material-symbols-outlined reveal">visibility_off</span>
                 </label>
                 <label for="confirm-passphrase">
-                    <span>Confirme a Senha:</span>
+                    <span>Confirmar Senha:</span>
                     <input type="password" name="confirm-passphrase" required/>
                     <span id="reveal-confirm-passphrase" class="material-symbols-outlined reveal">visibility_off</span>
                 </label>
@@ -75,6 +84,6 @@
             </div>
         </div>
     </div>
-    <div
+    <span class="material-symbols-outlined" id="theme-switch" title="Trocar Tema">emoji_objects</span>
 </body>
 </html>

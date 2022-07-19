@@ -13,6 +13,7 @@
 }
 
 body {
+    height: 100vh;
     margin: 0;
     padding: 0;
     background: var(--body-color-1) linear-gradient(60deg, var(--body-color-1) 15%, var(--body-color-2) 60%, var(--primary-color) 90%);
@@ -66,7 +67,8 @@ body {
     padding: 1rem 1.5rem;
     text-align: center;
     cursor: pointer;
-    transition: background-color 0.5s ease-out;
+    transition: background-color 0.15s ease-out;
+    user-select: none;
 }
 
 .container-head :first-child {
@@ -100,7 +102,6 @@ form {
     color: var(--primary-color);
     background: var(--secondary-color);
     border: 2px solid var(--secondary-color);
-    white-space: nowrap;
     user-select: none;
     cursor: text;
 }
@@ -113,6 +114,12 @@ form {
     background: var(--primary-color);
     color: var(--secondary-color);
     text-align: center;
+}
+
+@media only screen and (max-width: 601px) {
+    .container label:nth-child(4) span:nth-child(1) {
+        padding: 0.35rem 0.75rem 1.15rem;
+    }
 }
 
 .reveal {
@@ -135,12 +142,6 @@ input[type=submit] {
     margin: 1.5rem 1.5rem 0.5rem;
     padding: 0.75rem 1.95rem;
     border: 2px solid var(--secondary-color);
-}
-
-.container label span:hover, .reveal:hover, input[type=submit]:hover {
-    background: var(--secondary-color);
-    color: var(--primary-color);
-    cursor: pointer;
 }
 
 #reset-passphrase {
@@ -184,11 +185,6 @@ input {
     max-width: 1.5rem;
 }
 
-.container-head span.material-symbols-outlined:hover {
-    background: var(--primary-color);
-    color: var(--secondary-color);
-}
-
 .invalid {
     border: red solid 2px !important;
     background: red !important;
@@ -204,4 +200,15 @@ input[type=submit]:disabled {
 
 input:-webkit-autofill, input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s;
-  }
+}
+
+#theme-switch {
+    font-size: 3.5rem;
+    position: relative;
+    left: calc(50vw - 1.75rem);
+    bottom: 30px;
+}
+
+.dark-theme {
+    filter: drop-shadow(0 0 3px var(--secondary-color)) drop-shadow(0 0 7px var(--secondary-color)) drop-shadow(0 0 10px var(--secondary-color));
+}

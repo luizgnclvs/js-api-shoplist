@@ -1,21 +1,39 @@
-Parse.serverURL = "https://parseapi.back4app.com";
-
-Parse.initialize(
-    "pKFaqVGBWNehVkuNPTOhgg1xeRniu8fasw2N2bwX",
-    "f91Nk0ORFT21KBVbp5fndRj15AAkd3zD9qXWeMXz"
-);
-
 const signInForm = document.querySelector("[name=signin]");
+const signUpForm = document.querySelector("[name=signup]");
+const resetForm = document.querySelector("[name=reset]");
 
 signInForm.addEventListener("submit", (event) => {
     event.preventDefault();
     new FormData(signInForm);
 });
 
+signUpForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    new FormData(signUpForm);
+});
+
+resetForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    new FormData(resetForm);
+});
+
 signInForm.addEventListener("formdata", (event) => {
     let data = event.formData;
     signInForm.reset();
     signIn(data);
+});
+
+signUpForm.addEventListener("formdata", (event) => {
+    let data = event.formData;
+    signUpForm.reset();
+    signUp(data);
+});
+
+resetForm.addEventListener("formdata", (event) => {
+    let data = event.formData;
+    resetForm.reset();
+    document.querySelector(".reset").style.display = "none";
+    resetPassphrase(data);
 });
 
 const signIn = async (data) => {
@@ -30,19 +48,6 @@ const signIn = async (data) => {
             }
     }
 };
-
-const signUpForm = document.querySelector("[name=signup]");
-
-signUpForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    new FormData(signUpForm);
-});
-
-signUpForm.addEventListener("formdata", (event) => {
-    let data = event.formData;
-    signUpForm.reset();
-    signUp(data);
-});
 
 const signUp = async (data) => {
     let newUser = new Parse.User();
@@ -59,36 +64,24 @@ const signUp = async (data) => {
     }
 };
 
-const btResetPassword = document.getElementById("reset-passphrase");
-
-const resetForm = document.querySelector("[name=reset]");
-
-resetForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    new FormData(resetForm);
-});
-
-resetForm.addEventListener("formdata", (event) => {
-    let data = event.formData;
-    resetForm.reset();
-    document.querySelector(".reset").style.display = "none";
-    resetPassphrase(data);
-});
-
-btResetPassword.onclick = () => {
-    document.querySelector(".reset").style.display = "flex";
-};
-
 const resetPassphrase = (data) => {
     Parse.User.requestPasswordReset(data.get("reset-email"));
 
     try {
-        console.log("Requisição de redefiniçaõ de senha enviada com sucesso.");
+        console.log("Requisição de redefinição de senha enviada com sucesso.");
         alert("Requisição enviada com sucesso. Verifique seu e-mail.");
     } catch (error) {
         console.error(`A requisição falhou. Erro de código: ${error.code} - ${error.message}`);
         alert("Falha na requisição. Você tem certeza que inseriu o e-mail correto?");
     }
+};
+
+document.getElementById("reset-passphrase").onclick = () => {
+    document.querySelector(".reset").style.display = "flex";
+};
+
+document.querySelector(".container-head span.material-symbols-outlined").onclick = () => {
+    document.querySelector(".reset").style.display = "none";
 };
 
 document.querySelector(".container-head").childNodes.forEach(element => {
@@ -103,10 +96,12 @@ document.querySelector(".container-head").childNodes.forEach(element => {
             element.previousElementSibling.style.color = "var(--primary-color)";
             element.previousElementSibling.style.backgroundColor = "var(--secondary-color)";
             form.previousElementSibling.style.display = "none";
+            form.previousElementSibling.reset();
         } else {
             element.nextElementSibling.style.color = "var(--primary-color)"
             element.nextElementSibling.style.backgroundColor = "var(--secondary-color)";
             form.nextElementSibling.style.display = "none";
+            form.nextElementSibling.reset();
         }
 
         form.style.display = "flex";
@@ -138,7 +133,18 @@ revealPasswords.forEach(object => {
         object.reveal.innerHTML = "visibility";
     });
 
+    object.reveal.addEventListener("touchstart", () => {
+        object.input.setAttribute("type", "text");
+        object.reveal.innerHTML = "visibility";
+    });
+
     object.reveal.addEventListener("mouseup", () => {
+        object.input.setAttribute("type", "password");
+        object.reveal.innerHTML = "visibility_off";
+        object.input.focus();
+    });
+    
+    object.reveal.addEventListener("touchend", () => {
         object.input.setAttribute("type", "password");
         object.reveal.innerHTML = "visibility_off";
         object.input.focus();
@@ -172,10 +178,6 @@ matchPasswords.forEach(object => {
     });
 });
 
-document.querySelector(".container-head span.material-symbols-outlined").onclick = () => {
-    document.querySelector(".reset").style.display = "none";
-};
-
 const clipHeader = () => {
     let width = window.innerWidth;
     let segments = Math.floor(width / 80);
@@ -203,5 +205,42 @@ const clipHeader = () => {
     document.querySelector(".header").style.clipPath = clipPath;
 };
 
+const btTheme = document.getElementById("theme-switch");
+
+btTheme.onclick = () => {
+    if (localStorage.getItem("theme") === "dark") {
+        localStorage.setItem("theme", "light");
+    } else {
+        localStorage.setItem("theme", "dark");
+    }
+    setTheme();
+};
+
+const setTheme = () => {
+    let theme = localStorage.getItem("theme");
+    let root = document.querySelector(":root");
+
+    if (theme === "dark") {
+        root.style.setProperty("--primary-color", " #362222");
+        root.style.setProperty("--secondary-color", "#c7bea2");
+        root.style.setProperty("--header-color-1", "#9a9483");
+        root.style.setProperty("--header-color-2", "#e5dcc3");
+        root.style.setProperty("--body-color-1", "#171010");
+        root.style.setProperty("--body-color-2", "#2b2b2b");
+
+        btTheme.classList.add("dark-theme");
+    } else {
+        root.style.setProperty("--primary-color", " #c7bea2");
+        root.style.setProperty("--secondary-color", "#362222");
+        root.style.setProperty("--header-color-1", "#171010");
+        root.style.setProperty("--header-color-2", "#2b2b2b");
+        root.style.setProperty("--body-color-1", "#9a9483");
+        root.style.setProperty("--body-color-2", "#e5dcc3");
+
+        btTheme.classList.remove("dark-theme");
+    }
+};
+
 clipHeader();
+setTheme();
 window.onresize = clipHeader;
